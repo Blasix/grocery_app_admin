@@ -21,8 +21,10 @@ class UploadProductForm extends StatefulWidget {
 
 class _UploadProductFormState extends State<UploadProductForm> {
   final _formKey = GlobalKey<FormState>();
-
+  String _catValue = 'Vegetables';
   late final TextEditingController _titleController, _priceController;
+  int groupValue = 1;
+  bool isPiece = false;
 
   @override
   void initState() {
@@ -51,7 +53,15 @@ class _UploadProductFormState extends State<UploadProductForm> {
       filled: true,
       fillColor: _scaffoldColor,
       border: InputBorder.none,
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(
+          color: _scaffoldColor,
+          width: 0,
+        ),
+      ),
       focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
         borderSide: BorderSide(
           color: color,
           width: 1.0,
@@ -62,6 +72,7 @@ class _UploadProductFormState extends State<UploadProductForm> {
       key: context.read<MenuController>().getAddProductscaffoldKey,
       drawer: const SideMenu(),
       body: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (Responsive.isDesktop(context))
             const Expanded(
@@ -72,12 +83,22 @@ class _UploadProductFormState extends State<UploadProductForm> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  Header(fct: () {
-                    context.read<MenuController>().controlAddProductsMenu();
-                  }),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Header(
+                      fct: () {
+                        context.read<MenuController>().controlAddProductsMenu();
+                      },
+                      title: '',
+                      showTextField: false,
+                    ),
+                  ),
                   Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: Theme.of(context).cardColor,
+                    ),
                     width: size.width > 650 ? 650 : size.width,
-                    color: Theme.of(context).cardColor,
                     padding: const EdgeInsets.all(16),
                     margin: const EdgeInsets.all(16),
                     child: Form(
@@ -153,7 +174,15 @@ class _UploadProductFormState extends State<UploadProductForm> {
                                         isTitle: true,
                                       ),
                                       const SizedBox(height: 10),
-                                      // Drop down menu code here
+                                      Material(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          color: _scaffoldColor,
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8.0),
+                                            child: _categoryDropDown(),
+                                          )),
                                       const SizedBox(
                                         height: 20,
                                       ),
@@ -165,7 +194,38 @@ class _UploadProductFormState extends State<UploadProductForm> {
                                       const SizedBox(
                                         height: 10,
                                       ),
-                                      // Radio button code here
+                                      Row(
+                                        children: [
+                                          TextWidget(
+                                            text: 'KG',
+                                            color: color,
+                                          ),
+                                          Radio<int>(
+                                            value: 1,
+                                            groupValue: groupValue,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                groupValue = value!;
+                                                isPiece = false;
+                                              });
+                                            },
+                                          ),
+                                          TextWidget(
+                                            text: 'Piece',
+                                            color: color,
+                                          ),
+                                          Radio<int>(
+                                            value: 2,
+                                            groupValue: groupValue,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                groupValue = value!;
+                                                isPiece = true;
+                                              });
+                                            },
+                                          ),
+                                        ],
+                                      )
                                     ],
                                   ),
                                 ),
@@ -173,8 +233,17 @@ class _UploadProductFormState extends State<UploadProductForm> {
                               // Image to be picked code is here
                               Expanded(
                                   flex: 4,
-                                  child: Container(
-                                    color: Colors.red,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(16),
+                                    child: Container(
+                                      height: size.width > 650
+                                          ? 350
+                                          : size.width * 0.45,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        color: _scaffoldColor,
+                                      ),
+                                    ),
                                   )),
                               Expanded(
                                   flex: 1,
@@ -229,6 +298,46 @@ class _UploadProductFormState extends State<UploadProductForm> {
                 ],
               ),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _categoryDropDown() {
+    return DropdownButtonHideUnderline(
+      child: DropdownButton<String>(
+        value: _catValue,
+        onChanged: (value) {
+          setState(() {
+            _catValue = value!;
+          });
+        },
+        hint: const Text('Select a category'),
+        items: const [
+          DropdownMenuItem(
+            child: Text('Vegetables'),
+            value: 'Vegetables',
+          ),
+          DropdownMenuItem(
+            child: Text('Fruits'),
+            value: 'Fruits',
+          ),
+          DropdownMenuItem(
+            child: Text('Grains'),
+            value: 'Grains',
+          ),
+          DropdownMenuItem(
+            child: Text('Nuts'),
+            value: 'Nuts',
+          ),
+          DropdownMenuItem(
+            child: Text('Herbs'),
+            value: 'Herbs',
+          ),
+          DropdownMenuItem(
+            child: Text('Spices'),
+            value: 'Spices',
           ),
         ],
       ),

@@ -37,29 +37,38 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
                 // It takes 5/6 part of the screen
                 flex: 5,
                 child: SingleChildScrollView(
-                     controller: ScrollController(),
-                  child: Column(
-                    children: [
-                      Header(
-                        fct: () {
-                          context
-                              .read<MenuController>()
-                              .controlProductsMenu();
-                        },
-                      ),
-                      Responsive(
-                        mobile: ProductGridWidget(
-                          crossAxisCount: size.width < 650 ? 2 : 4,
-                          childAspectRatio:
-                              size.width < 650 && size.width > 350 ? 1.1 : 0.8,
-                          isInMain: false,
+                  controller: ScrollController(),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+                        Header(
+                          fct: () {
+                            context
+                                .read<MenuController>()
+                                .controlProductsMenu();
+                          },
+                          title: 'All products',
                         ),
-                        desktop: ProductGridWidget(
-                          childAspectRatio: size.width < 1400 ? 0.8 : 1.05,
-                          isInMain: false,
+                        const SizedBox(
+                          height: 16,
                         ),
-                      ),
-                    ],
+                        Responsive(
+                          mobile: ProductGridWidget(
+                            crossAxisCount: size.width < 650 ? 2 : 4,
+                            childAspectRatio:
+                                size.width < 650 && size.width > 350
+                                    ? 1.1
+                                    : 0.8,
+                            isInMain: false,
+                          ),
+                          desktop: ProductGridWidget(
+                            childAspectRatio: size.width < 1400 ? 0.8 : 1.05,
+                            isInMain: false,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 )),
           ],

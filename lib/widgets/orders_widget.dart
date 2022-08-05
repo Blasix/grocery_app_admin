@@ -26,7 +26,7 @@ class _OrdersWidgetState extends State<OrdersWidget> {
       padding: const EdgeInsets.all(8.0),
       child: Material(
         borderRadius: BorderRadius.circular(8.0),
-        color: Theme.of(context).cardColor.withOpacity(0.4),
+        color: Theme.of(context).cardColor,
         child: Padding(
           padding: const EdgeInsets.all(0.0),
           child: Row(
@@ -36,7 +36,7 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                 flex: size.width < 650 ? 3 : 1,
                 child: Image.network(
                   'https://www.lifepng.com/wp-content/uploads/2020/11/Apricot-Large-Single-png-hd.png',
-        
+
                   fit: BoxFit.fill,
                   // height: screenWidth * 0.15,
                   // width: screenWidth * 0.15,
@@ -81,7 +81,6 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                   ],
                 ),
               ),
-             
             ],
           ),
         ),

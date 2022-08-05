@@ -22,7 +22,7 @@ class _ProductWidgetState extends State<ProductWidget> {
       padding: const EdgeInsets.all(8.0),
       child: Material(
         borderRadius: BorderRadius.circular(12),
-        color: Theme.of(context).cardColor.withOpacity(0.6),
+        color: Theme.of(context).cardColor,
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
           onTap: () {},
@@ -86,10 +86,13 @@ class _ProductWidgetState extends State<ProductWidget> {
                               color: color),
                         )),
                     const Spacer(),
-                    TextWidget(
-                      text: '1Kg',
-                      color: color,
-                      textSize: 18,
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: TextWidget(
+                        text: '1Kg',
+                        color: color,
+                        textSize: 18,
+                      ),
                     ),
                   ],
                 ),

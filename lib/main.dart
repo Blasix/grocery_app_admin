@@ -6,6 +6,11 @@ import 'consts/theme_data.dart';
 import 'controllers/MenuController.dart';
 import 'providers/dark_theme_provider.dart';
 
+//
+// run with images:
+// flutter run -d chrome --web-renderer html
+//
+
 void main() {
   runApp(const MyApp());
 }

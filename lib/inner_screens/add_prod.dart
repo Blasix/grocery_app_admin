@@ -1,3 +1,8 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:dotted_border/dotted_border.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:grocery_admin_panel/controllers/MenuController.dart';
@@ -7,6 +12,7 @@ import 'package:grocery_admin_panel/widgets/header.dart';
 import 'package:grocery_admin_panel/widgets/side_menu.dart';
 import 'package:grocery_admin_panel/widgets/text_widget.dart';
 import 'package:iconly/iconly.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import '../responsive.dart';
 
@@ -25,6 +31,8 @@ class _UploadProductFormState extends State<UploadProductForm> {
   late final TextEditingController _titleController, _priceController;
   int groupValue = 1;
   bool isPiece = false;
+  File? _pickedImage;
+  Uint8List webImage = Uint8List(8);
 
   @override
   void initState() {
@@ -41,7 +49,21 @@ class _UploadProductFormState extends State<UploadProductForm> {
     super.dispose();
   }
 
-  void _uploadForm() async {}
+  void _uploadForm() async {
+    final isValid = _formKey.currentState!.validate();
+  }
+
+  void clearForm() {
+    _priceController.clear();
+    _titleController.clear();
+    setState(() {
+      _catValue = 'Vegetables';
+      groupValue = 1;
+      isPiece = false;
+      _pickedImage = null;
+      webImage = Uint8List(8);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -236,6 +258,21 @@ class _UploadProductFormState extends State<UploadProductForm> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(16),
                                     child: Container(
+                                      child: _pickedImage == null
+                                          ? dottedBorder(color: color)
+                                          : ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              child: kIsWeb
+                                                  ? Image.memory(
+                                                      webImage,
+                                                      fit: BoxFit.fill,
+                                                    )
+                                                  : Image.file(
+                                                      _pickedImage!,
+                                                      fit: BoxFit.fill,
+                                                    ),
+                                            ),
                                       height: size.width > 650
                                           ? 350
                                           : size.width * 0.45,
@@ -251,14 +288,21 @@ class _UploadProductFormState extends State<UploadProductForm> {
                                     child: Column(
                                       children: [
                                         TextButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            setState(() {
+                                              _pickedImage = null;
+                                              webImage = Uint8List(8);
+                                            });
+                                          },
                                           child: TextWidget(
                                             text: 'Clear',
                                             color: Colors.red,
                                           ),
                                         ),
                                         TextButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            _pickImage();
+                                          },
                                           child: TextWidget(
                                             text: 'Update image',
                                             color: Colors.blue,
@@ -275,7 +319,9 @@ class _UploadProductFormState extends State<UploadProductForm> {
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 ButtonsWidget(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    clearForm();
+                                  },
                                   text: 'Clear form',
                                   icon: IconlyBold.danger,
                                   backgroundColor: Colors.red.shade300,
@@ -300,6 +346,61 @@ class _UploadProductFormState extends State<UploadProductForm> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Future<void> _pickImage() async {
+    if (!kIsWeb) {
+      final ImagePicker _picker = ImagePicker();
+      XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+      if (image != null) {
+        var selected = File(image.path);
+        setState(() {
+          _pickedImage = selected;
+        });
+      }
+    } else if (kIsWeb) {
+      final ImagePicker _picker = ImagePicker();
+      XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+      if (image != null) {
+        var f = await image.readAsBytes();
+        setState(() {
+          webImage = f;
+          _pickedImage = File('a');
+        });
+      }
+    } else {
+      return;
+    }
+  }
+
+  Widget dottedBorder({required Color color}) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: DottedBorder(
+        dashPattern: const [6.7],
+        borderType: BorderType.RRect,
+        color: color,
+        radius: const Radius.circular(12),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.image_outlined,
+                color: color,
+                size: 50,
+              ),
+              TextButton(
+                  onPressed: () {
+                    _pickImage();
+                  },
+                  child:
+                      TextWidget(text: 'Choose an image', color: Colors.blue))
+            ],
+          ),
+        ),
       ),
     );
   }

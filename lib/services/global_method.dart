@@ -1,3 +1,4 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/text_widget.dart';
@@ -14,47 +15,67 @@ class GlobalMethods {
     required BuildContext context,
   }) async {
     await showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Row(children: [
-              Image.asset(
-                'assets/images/warning-sign.png',
-                height: 20,
-                width: 20,
-                fit: BoxFit.fill,
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Row(children: [
+            Image.asset(
+              'assets/images/warning-sign.png',
+              height: 20,
+              width: 20,
+              fit: BoxFit.fill,
+            ),
+            const SizedBox(
+              width: 8,
+            ),
+            Text(title),
+          ]),
+          content: Text(subtitle),
+          actions: [
+            TextButton(
+              onPressed: () {
+                if (Navigator.canPop(context)) {
+                  Navigator.pop(context);
+                }
+              },
+              child: TextWidget(
+                color: Colors.cyan,
+                text: 'Cancel',
+                textSize: 18,
               ),
-              const SizedBox(
-                width: 8,
+            ),
+            TextButton(
+              onPressed: () {
+                fct();
+              },
+              child: TextWidget(
+                color: Colors.red,
+                text: 'OK',
+                textSize: 18,
               ),
-              Text(title),
-            ]),
-            content: Text(subtitle),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  if (Navigator.canPop(context)) {
-                    Navigator.pop(context);
-                  }
-                },
-                child: TextWidget(
-                  color: Colors.cyan,
-                  text: 'Cancel',
-                  textSize: 18,
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  fct();
-                },
-                child: TextWidget(
-                  color: Colors.red,
-                  text: 'OK',
-                  textSize: 18,
-                ),
-              ),
-            ],
-          );
-        });
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  static dialog(
+      {required BuildContext context,
+      required String title,
+      required String message,
+      required ContentType contentType}) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: AwesomeSnackbarContent(
+          title: title,
+          message: message,
+          contentType: contentType,
+        ),
+      ),
+    );
   }
 }

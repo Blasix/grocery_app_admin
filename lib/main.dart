@@ -1,9 +1,11 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery_admin_panel/screens/main_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'consts/theme_data.dart';
 import 'controllers/MenuController.dart';
+import 'firebase_options.dart';
 import 'providers/dark_theme_provider.dart';
 
 //
@@ -11,7 +13,11 @@ import 'providers/dark_theme_provider.dart';
 // flutter run -d chrome --web-renderer html
 //
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 

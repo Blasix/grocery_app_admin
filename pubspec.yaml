@@ -39,10 +39,12 @@ dependencies:
   dotted_border: ^2.0.0+2
   image_picker: ^0.8.5+3
   uuid: ^3.0.6
+  awesome_snackbar_content: ^0.0.8
   # Firebase
   firebase_core: ^1.15.0
   cloud_firestore: ^3.1.13
   firebase_storage: ^10.2.14
+  flutter_svg: ^1.1.4
 
 dev_dependencies:
   flutter_test:
